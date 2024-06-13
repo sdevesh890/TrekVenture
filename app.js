@@ -4,7 +4,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const Campground = require("./models/TrekModel");
 const methodOverride = require('method-override');
-
+const ejsMate = require('ejs-mate');
 app.listen(3000, () => {
   console.log("SERVING ON PORT 3000");
 });
@@ -19,8 +19,14 @@ db.once("open", () => {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.engine('ejs',ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
+app.get('/',(req,res)=>
+{
+   res.render('home');
+})
 
 app.get("/campgrounds", async (req, res) => {
   const campgrounds = await Campground.find({});

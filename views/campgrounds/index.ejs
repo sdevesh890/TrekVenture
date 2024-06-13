@@ -1,18 +1,61 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campgrounds</title>
-</head>
-<body>
-    <h1>All Campgrounds</h1>
-    <h2><a href="/campgrounds/new">Add Campground</a></h2>
-    <ul>
-        <% for( let camp of campgrounds ) { %>
-           <li>
-            <a href="/campgrounds/<%= camp._id %>"><%= camp.title %></a>
-           </li>
-        <% } %>
-    </ul>
-</body>
-</html>
+<% layout('layouts/boilerplate') %>    
+<style>
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .animated {
+        animation-duration: 1s;
+        animation-fill-mode: both;
+    }
+    .fadeInUp {
+        animation-name: fadeInUp;
+    }
+    .card-img-top {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card {
+        display: flex;
+        flex-direction: column;
+        justify-content:  space-between;
+        width: 18rem;
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .btn-container {
+        margin: 0.8rem 0;
+    }
+</style>  
+<title>Campgrounds</title>
+<h3 class="text-center">All Campgrounds</h3>
+<ul class="d-flex flex-wrap">
+    <% for(let camp of campgrounds) { %>
+        <div class="card m-5 animated fadeInUp">
+            <img src="<%= camp.image %>" class="card-img-top img-thumbnail" alt="...">
+            <div class="card-body">
+                <div class="card-content">
+                    <h5 class="card-title"><%= camp.title %></h5>
+                    <p><%= camp.location %></p>
+                    <p class="card-text"><%= camp.description %></p>
+                </div>
+                <div class="btn-container">
+                    <a href="/campgrounds/<%= camp._id %>" class="btn btn-primary">Details</a>
+                </div>
+            </div>
+        </div>
+    <% } %>
+</ul>
