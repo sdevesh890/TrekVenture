@@ -1,38 +1,70 @@
-    <% layout('layouts/boilerplate') %>   
-    <title>Create Trek</title>
-    <h2 class="text-center">New Campground</h2>
-     <div class="col-6 offset-3">
-      <form action="/campgrounds" method="post">
+<% layout('layouts/boilerplate') %>
+<title>Create Trek</title>
+<h2 class="text-center">New Campground</h2>
+<div class="col-6 offset-3">
+  <form action="/campgrounds" method="post" novalidate class="validated-form">
+    <div class="mb-1">
+      <label for="title" class="form-label">Title</label>
+      <input
+        type="text"
+        class="form-control length"
+        id="title"
+        aria-describedby="emailHelp"
+        name="campgrounds[title]"
+        required
+      />
+    </div>
 
-         <div class="mb-1">
-           <label for="title" class="form-label">Title</label>
-           <input type="text" class="form-control length" id="title" aria-describedby="emailHelp" name="campgrounds[title]">
-         </div>
+    <div class="mb-1">
+      <label for="location" class="form-label">Location [City , State]</label>
+      <input
+        type="text"
+        class="form-control length"
+        id="location"
+        name="campgrounds[location]"
+        required
+      />
+    </div>
 
-         <div class="mb-1">
-           <label for="location" class="form-label">Location</label>
-           <input type="text" class="form-control length" id="location" name="campgrounds[location]">
-         </div>
+    <div class="mb-1">
+      <label for="image" class="form-label">Image URL</label>
+      <input
+        type="text"
+        class="form-control length"
+        id="image"
+        name="campgrounds[image]"
+        required
+      />
+    </div>
 
-         <div class="mb-1">
-            <label for="image" class="form-label">Image URL</label>
-            <input type="text" class="form-control length" id="image" name="campgrounds[image]">
-          </div>
-          
-           <div class="mb-1">
-            <label for="price" class="form-label">Campground Price</label>
-            <div class="input-group">
-               <span class="input-group-text" id="price-label">$</span>
-               <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" id="price" name="campgrounds[price]">
-               <span class="input-group-text">.00</span>
-             </div>
-           </div>
-           
-          <div class="mb-2">
-            <label for="description" class="form-label">Description</label>
-            <textarea type="text" class="form-control length" id="image" name="campgrounds[description]"> </textarea>
-          </div>
+    <div class="mb-1">
+      <label for="price" class="form-label">Campground Price</label>
+      <div class="input-group">
+        <span class="input-group-text" id="price-label">$</span>
+        <input
+          type="text"
+          class="form-control"
+          aria-label="Amount (to the nearest dollar)"
+          id="price"
+          name="campgrounds[price]"
+          required
+        />
+        <span class="input-group-text">.00</span>
+      </div>
+    </div>
 
-         <button type="submit" class="btn btn-success">Add Campground</button>
-    </form>
-     </div>
+    <div class="mb-2">
+      <label for="description" class="form-label">Description</label>
+      <textarea
+        type="text"
+        class="form-control"
+        id="description"
+        name="campgrounds[description]"
+        required
+      >
+      </textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Add Campground</button>
+  </form>
+</div>
