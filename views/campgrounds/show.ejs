@@ -1,75 +1,55 @@
-<% layout('layouts/boilerplate') %>
+<% layout('layouts/boilerplate')%>
 <title><%= camp.title %></title>
-<style>
-    @keyframes fadeInUp {
-        0% {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    .animated {
-        animation-duration: 1s;
-        animation-fill-mode: both;
-    }
-    .fadeInUp {
-        animation-name: fadeInUp;
-    }
-    .card {
-        max-width: 800px;
-        margin: auto;
-    }
-    .camp-img {
-        width: 100%;
-        height: 400px;
-        object-fit: cover;
-        border-radius: 0.25rem 0.25rem 0 0;
-    }
-    .card-img-overlay {
-        background: rgba(0, 0, 0, 0.5);
-        border-radius: 0.25rem 0.25rem 0 0;
-    }
-    .card-title {
-        margin-bottom: 0;
-    }
-    a
-    {
-       text-decoration: none;
-    }
-    .card-btn a , form  
-    {
-        padding: 0.5rem;
-    }
-</style>
+<div class="row">
+    <div class="col-6">
+        <div class="card mb-3">
+            <img src="<%= camp.image%>" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title"><%= camp.title%></h5>
+                <p class="card-text"><%= camp.description%></p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item text-muted"><%= camp.location%></li>
+                <li class="list-group-item">$<%= camp.price%>/night</li>
+            </ul>
+            <div class="card-body">
+                <a class="card-link btn btn-info" href="/campgrounds/<%=camp._id%>/edit">Edit</a>
+                <form class="d-inline" action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+            <div class="card-footer text-muted">
+                2 days ago
+            </div>
+        </div>
 
-<div class="container">
-    <div class="card text-white bg-dark mb-3 animated fadeInUp">
-        <img class="camp-img" src="<%= camp.image %>" alt="Card image">
-        <div class="card-img-overlay d-flex flex-column justify-content-end">
-            <h2 class="card-title"><%= camp.title %></h2>
-            <p class="card-text"><%= camp.location %></p>
-        </div>
     </div>
-
-    <div class="card border-dark mb-3 animated fadeInUp" style="animation-delay: 0.5s;">
-        <div class="card-header bg-primary text-white">
-            Price: $<%= camp.price %>
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">Description</h5>
-            <p class="card-text"><%= camp.description %></p>
-        </div>
-    </div>
-    
-    <div class="card-btn fadeInUp" style="animation-delay: 1s;">
-        <a class="card" href="/campgrounds/<%= camp._id %>/edit">
-          <button class="btn btn-warning">Edit</button>
-        </a>
-        <form class="card" action="/campgrounds/<%= camp._id %>?_method=DELETE" method="post">
-            <button class="btn btn-danger delete-btn">Delete</button>
+    <div class="col-6">
+        <h2>Leave a Review</h2>
+        <form action="/campgrounds/<%=camp._id%>/reviews" method="POST" class="mb-3 validated-form" novalidate>
+            <div class="mb-3">
+                <label class="form-label" for="rating">Rating</label>
+                <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="body">Review</label>
+                <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <button class="btn btn-success">Submit</button>
         </form>
+        <% for(let review of camp.reviews) { %>
+            <div class="card mb-3 ">
+                <div class="card-body">
+                    <h5 class="card-title">Rating: <%= review.rating %></h5>
+                    <p class="card-text">Review: <%= review.body %></p>
+                    <form action="/campgrounds/<%= camp._id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+            <% } %>
     </div>
 </div>

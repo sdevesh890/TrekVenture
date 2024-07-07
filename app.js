@@ -3,11 +3,12 @@ const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 const Campground = require("./models/TrekModel");
+const Review = require('./models/review');
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const catchAsync = require("./utils/catchAsync");
+const {campgroundSchema , reviewSchema} = require('./Schemas');
+const catchAsync = require('./utils/catchAsync');
 const ExpressError = require("./utils/ExpressError");
-const Joi = require("joi");
 const ObjectID = require('mongoose').Types.ObjectId;
 
 app.listen(3000, () => {
@@ -31,16 +32,6 @@ app.set("views", path.join(__dirname, "views"));
 
  const validateSchema = (req,res,next)=>
   {
-    const campgroundSchema = Joi.object({
-      campgrounds: Joi.object({
-        title: Joi.string().required(),
-        price: Joi.number().required().min(0),
-        image: Joi.string().required(),
-        description: Joi.string().required(),
-        location: Joi.string().required(),
-      }).required(),
-    });
-
     const { error } = campgroundSchema.validate(req.body);
     if (error) {
       const msg = error.details.map((el) => el.message).join(", ");
@@ -50,6 +41,19 @@ app.set("views", path.join(__dirname, "views"));
       next();
     }
   }
+
+ const validateReview =(req,res,next)=>
+  {
+      const {error} = reviewSchema.validate(req.body);
+      if(error)
+        {
+          const msg = error.details.map((el) => el.message).join(", ");
+         throw new ExpressError(msg, 400);
+        }else 
+        {
+          next();
+        }
+  } 
 
 app.get("/", (req, res) => {
   res.render("home");
@@ -75,7 +79,6 @@ app.post(
     res.redirect(`/campgrounds/${camp._id}`);
   })
 );
-
 app.get(
   "/campgrounds/:id",
   catchAsync(async (req, res) => {
@@ -84,7 +87,7 @@ app.get(
       {
          throw new ExpressError('Invalid ID',400);
       }
-    const camp = await Campground.findById(id);
+    const camp = await Campground.findById(id).populate('reviews');
     if (!camp) throw new ExpressError("Product Not Found", 404);
     res.render("campgrounds/show", { camp });
   })
@@ -103,7 +106,15 @@ app.get(
     res.render("campgrounds/edit", { camp });
   })
 );
-
+app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async (req,res)=>
+  {
+    const campground = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+  }))
 app.put(
   "/campgrounds/:id", validateSchema , 
   catchAsync(async (req, res) => {
@@ -121,6 +132,14 @@ app.delete(
     res.redirect(`/campgrounds`);
   })
 );
+
+app.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async(req,res)=>
+{
+     const {id,reviewId} = req.params;
+     await Campground.findByIdAndUpdate(id , {$pull : {reviews : reviewId}});
+      await Review.findByIdAndDelete(reviewId);
+     res.redirect(`/campgrounds/${id}`);
+}));
 
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page Not Found", 404));
