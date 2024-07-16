@@ -1,45 +1,5 @@
-<% layout('layouts/boilerplate') %>    
-<style>
-    @keyframes fadeInUp {
-        0% {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    .animated {
-        animation-duration: 1s;
-        animation-fill-mode: both;
-    }
-    .fadeInUp {
-        animation-name: fadeInUp;
-    }
-    .card-img-top {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-    }
-
-    .card {
-        display: flex;
-        flex-direction: column;
-        justify-content:  space-between;
-        width: 18rem;
-    }
-
-    .card-body {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .btn-container {
-        margin: 0.8rem 0;
-    }
-</style>  
+<% layout('layouts/boilerplate') %>
+<link rel="stylesheet" href="CSS/index.css">    
 <title>Campgrounds</title>
 <h3 class="text-center">All Campgrounds</h3>
 <ul class="d-flex flex-wrap">
