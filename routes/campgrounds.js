@@ -5,7 +5,7 @@ const catchAsync = require("../utils/catchAsync");
 const ExpressError = require("../utils/ExpressError");
 const ObjectID = require("mongoose").Types.ObjectId;
 const { campgroundSchema } = require("../Schemas");
-
+const {isLoggedIn} = require('../Middleware');
 const validateSchema = (req, res, next) => {
   const { error } = campgroundSchema.validate(req.body);
   if (error) {
@@ -17,19 +17,19 @@ const validateSchema = (req, res, next) => {
 };
 
 router.get(
-  "/",
+  "/" , isLoggedIn,
   catchAsync(async (req, res) => {
     const campgrounds = await Campground.find({});
     res.render("campgrounds/index", { campgrounds });
   })
 );
 
-router.get("/new", (req, res) => {
+router.get("/new" ,isLoggedIn, (req, res) => {
   res.render("campgrounds/new");
 });
 
 router.post(
-  "/",
+  "/",isLoggedIn,
   validateSchema,
   catchAsync(async (req, res, next) => {
     const camp = new Campground(req.body.campgrounds);
@@ -39,7 +39,7 @@ router.post(
   })
 );
 router.get(
-  "/:id",
+  "/:id",isLoggedIn,
   catchAsync(async (req, res) => {
     const { id } = req.params;
     if (!ObjectID.isValid(id)) {
@@ -57,7 +57,7 @@ router.get(
 );
 
 router.get(
-  "/:id/edit",
+  "/:id/edit",isLoggedIn,
   catchAsync(async (req, res) => {
     const { id } = req.params;
     if (!ObjectID.isValid(id)) {
