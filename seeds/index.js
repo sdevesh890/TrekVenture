@@ -38,6 +38,7 @@ const seedDB = async () => {
     // seed data into campground
     const camp = new Campground({
       image: await seedImg(),
+      author : '66ab832037a11061582557c1',
       title: `${descriptors[descriptorsSeed]} ${places[placeSeed]}`,
       location: `${cities[citySeed].city}, ${cities[citySeed].state}`,
       price : price,

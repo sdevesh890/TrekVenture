@@ -2,22 +2,11 @@ const express = require("express");
 const router = express.Router();
 const Campground = require("../models/TrekModel");
 const catchAsync = require("../utils/catchAsync");
-const ExpressError = require("../utils/ExpressError");
 const ObjectID = require("mongoose").Types.ObjectId;
-const { campgroundSchema } = require("../Schemas");
-const {isLoggedIn} = require('../Middleware');
-const validateSchema = (req, res, next) => {
-  const { error } = campgroundSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(", ");
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
-};
+const {isLoggedIn , isAuthor , validateSchema} = require('../Middleware');
 
 router.get(
-  "/" , isLoggedIn,
+  "/" ,
   catchAsync(async (req, res) => {
     const campgrounds = await Campground.find({});
     res.render("campgrounds/index", { campgrounds });
@@ -33,20 +22,27 @@ router.post(
   validateSchema,
   catchAsync(async (req, res, next) => {
     const camp = new Campground(req.body.campgrounds);
+    camp.author = req.user._id; 
     await camp.save();
     req.flash('success','Successfully created a new Campground');
     res.redirect(`/campgrounds/${camp._id}`);
   })
 );
 router.get(
-  "/:id",isLoggedIn,
+  "/:id",
   catchAsync(async (req, res) => {
     const { id } = req.params;
     if (!ObjectID.isValid(id)) {
       req.flash('error','Invalid ID');
       return res.redirect('/campgrounds');
     }
-    const camp = await Campground.findById(id).populate("reviews");
+    const camp = await Campground.findById(id).populate(
+    {
+      path : 'reviews' ,
+      populate : {
+         path : 'author'
+      }
+    }).populate("author");
     if(!camp)
       {
          req.flash('error','Can not find that campground');
@@ -57,7 +53,7 @@ router.get(
 );
 
 router.get(
-  "/:id/edit",isLoggedIn,
+  "/:id/edit",isLoggedIn, isAuthor ,
   catchAsync(async (req, res) => {
     const { id } = req.params;
     if (!ObjectID.isValid(id)) {
@@ -75,11 +71,11 @@ router.get(
 );
 
 router.put(
-  "/:id",
+  "/:id", isLoggedIn , isAuthor,
   validateSchema,
   catchAsync(async (req, res) => {
     const { id } = req.params;
-    const camp = await Campground.findByIdAndUpdate(id, req.body.campgrounds, {
+    await Campground.findByIdAndUpdate(id, req.body.campgrounds, {
       new: true,
     });
     req.flash('success','Successfully update campground');
@@ -88,9 +84,10 @@ router.put(
 );
 
 router.delete(
-  "/:id",
+  "/:id", isLoggedIn , isAuthor , 
   catchAsync(async (req, res) => {
     const { id } = req.params;
+    const campground = await Campground.findById(id);
     await Campground.findByIdAndDelete(id);
     req.flash('success','Successfully delete campground');
     res.redirect(`/campgrounds`);
