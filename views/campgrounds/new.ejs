@@ -2,8 +2,8 @@
 <title>Create Trek</title>
 <h2 class="text-center">New Campground</h2>
 <div class="col-6 offset-3">
-  <form action="/campgrounds" method="post" novalidate class="validated-form">
-    <div class="mb-1">
+  <form action="/campgrounds" method="post" novalidate class="validated-form" enctype="multipart/form-data">
+    <div class="mb-3">
       <label for="title" class="form-label">Title</label>
       <input
         type="text"
@@ -15,7 +15,7 @@
       />
     </div>
 
-    <div class="mb-1">
+    <div class="mb-3">
       <label for="location" class="form-label">Location [City , State]</label>
       <input
         type="text"
@@ -25,19 +25,23 @@
         required
       />
     </div>
-
-    <div class="mb-1">
-      <label for="image" class="form-label">Image URL</label>
-      <input
+    
+    <div class="mb-3">
+      <label for="image" class="form-label">Add Images</label>
+      <input class="form-control" type="file" id="image" name="image" multiple>
+    </div>
+    <!-- <div class="mb-1">
+      <label for="image" class="form-label">Image Upload</label>
+      <!-- <input
         type="text"
         class="form-control length"
         id="image"
         name="campgrounds[image]"
         required
-      />
-    </div>
+      /> -->
+    <!-- </div> --> 
 
-    <div class="mb-1">
+    <div class="mb-3">
       <label for="price" class="form-label">Campground Price</label>
       <div class="input-group">
         <span class="input-group-text" id="price-label">$</span>
@@ -53,7 +57,7 @@
       </div>
     </div>
 
-    <div class="mb-2">
+    <div class="mb-3">
       <label for="description" class="form-label">Description</label>
       <textarea
         type="text"

@@ -1,11 +1,19 @@
 <% layout('layouts/boilerplate') %>
-<link rel="stylesheet" href="CSS/index.css">    
+<link rel="stylesheet" href="/CSS/index.css">    
 <title>Campgrounds</title>
 <h3 class="text-center">All Campgrounds</h3>
 <ul class="d-flex flex-wrap">
     <% for(let camp of campgrounds) { %>
         <div class="card m-5 animated fadeInUp">
-            <img src="<%= camp.image %>" class="card-img-top img-thumbnail" alt="...">
+            <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <% camp.images.forEach((img,i) => { %>
+                        <div class="carousel-item <%= i===0?'active' : '' %>">
+                            <img src="<%= img.url %>" class="card-img-top img-thumbnail" alt="...">
+                          </div>
+                    <% }) %>
+                </div>
+              </div>
             <div class="card-body">
                 <div class="card-content">
                     <h5 class="card-title"><%= camp.title %></h5>

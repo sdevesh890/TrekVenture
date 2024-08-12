@@ -37,13 +37,22 @@ const seedDB = async () => {
     const price = Math.floor(Math.random()*15 + 1);
     // seed data into campground
     const camp = new Campground({
-      image: await seedImg(),
       author : '66ab832037a11061582557c1',
       title: `${descriptors[descriptorsSeed]} ${places[placeSeed]}`,
       location: `${cities[citySeed].city}, ${cities[citySeed].state}`,
       price : price,
       description:
         'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis, nihil tempora vel aspernatur quod aliquam illum! Iste impedit odio esse neque veniam molestiae eligendi commodi minus, beatae accusantium, doloribus quo!',
+        images : [
+          {
+              url: 'https://res.cloudinary.com/douqbebwk/image/upload/v1600060601/YelpCamp/ahfnenvca4tha00h2ubt.png',
+              filename: 'YelpCamp/ahfnenvca4tha00h2ubt'
+          },
+          {
+              url: 'https://res.cloudinary.com/douqbebwk/image/upload/v1600060601/YelpCamp/ruyoaxgf72nzpi4y6cdi.png',
+              filename: 'YelpCamp/ruyoaxgf72nzpi4y6cdi'
+          }
+      ]
     })
  
     await camp.save()
