@@ -1,6 +1,10 @@
 <% layout('layouts/boilerplate') %>
 <link rel="stylesheet" href="/CSS/stars.css">
 <title><%= camp.title %></title>
+<script>
+    const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
+    const campground = <%- JSON.stringify(camp) %>
+  </script>
 <div class="row">
     <div class="col-lg-6 col-12">
         <div class="card mb-3">
@@ -49,7 +53,9 @@
             </div>
         </div>
     </div>
+    
     <div class="col-lg-6 col-12">
+        <div id="map" style="width: 400px; height: 300px;" class="mb-3"></div>
         <% if (currentUser) { %>
             <h2>Leave a Review</h2>
             <form action="/campgrounds/<%=camp._id%>/reviews" method="POST" class="mb-3 validated-form" novalidate>
@@ -112,4 +118,4 @@
         <% } %>
     </div>
 </div>
-
+    <script src="/Javascript/showPage.js"></script>

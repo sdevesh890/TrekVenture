@@ -1,6 +1,9 @@
 const Campground = require("../models/TrekModel");
 const ObjectID = require("mongoose").Types.ObjectId;
 const {cloudinary} = require('../cloudinary');
+const maptilerClient = require('@maptiler/client');
+maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
+
 module.exports.indexCamp = async (req, res) => {
     const campgrounds = await Campground.find({});
     res.render("campgrounds/index", { campgrounds });
@@ -11,7 +14,10 @@ module.exports.newForm = (req, res) => {
 }  
 
 module.exports.newCampground = async (req, res, next) => {
+  const geoData = await maptilerClient.geocoding.forward(req.body.campgrounds.location, { limit: 1 });
+    
     const camp = new Campground(req.body.campgrounds);
+    camp.geometry = geoData.features[0].geometry;
     camp.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
     camp.author = req.user._id; 
     await camp.save();
@@ -60,6 +66,8 @@ module.exports.editGet = async (req, res) => {
     const camp =  await Campground.findByIdAndUpdate(id, {...req.body.campgrounds}, {
       new: true,
     });
+    const geoData = await maptilerClient.geocoding.forward(req.body.campgrounds.location, { limit: 1 });
+    camp.geometry = geoData.features[0].geometry;
     const img = req.files.map(f => ({ url: f.path, filename: f.filename }));
     camp.images.push(...img);
     await camp.save();
