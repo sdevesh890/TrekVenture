@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Review = require('./review');
-const { coordinates } = require('@maptiler/client');
+
+
 
 const imageSchema = new Schema({
     url : String , 
@@ -11,6 +12,7 @@ imageSchema.virtual('thumbnail').get(function()
 {
     return this.url.replace('/upload','/upload/w_200/h_200')
 })
+const opts = { toJSON : {virtuals : true}}
 const TrekSchema = new Schema({
     title : String , 
     price : Number ,
@@ -40,7 +42,11 @@ const TrekSchema = new Schema({
         ref : 'Review'
         }
 ]
-});
+},opts);
+TrekSchema.virtual('properties.popUpMarkup').get(function()
+{
+    return `<a href="/campgrounds/${this._id}">${this.title}</a>`
+})
 // Query Middleware 
 TrekSchema.post('findOneAndDelete',async(doc)=>
 {
