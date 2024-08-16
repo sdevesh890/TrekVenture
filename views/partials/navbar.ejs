@@ -1,29 +1,43 @@
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand">TrekVenture</a>
+<link rel="stylesheet" href="/CSS/navBar.css">
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="/">TrekVenture</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+          <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/campgrounds">Campgrounds</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/campgrounds/new">New Campground</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav ms-auto">
-          <% if (!currentUser) { %>
-            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
-          <% } else { %>
-            <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
-          <% } %>
-        </ul>
+          <ul class="navbar-nav">
+              <li class="nav-item">
+                  <a class="nav-link <%= (currentPath === '/' ? 'active' : '') %>" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link <%= (currentPath.startsWith('/campgrounds') && !currentPath.endsWith('/new') ? 'active' : '') %>" href="/campgrounds">Campgrounds</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link <%= (currentPath === '/campgrounds/new' ? 'active' : '') %>" href="/campgrounds/new">New Campground</a>
+              </li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+              <% if (!currentUser) { %>
+                  <li class="nav-item">
+                      <a class="nav-link <%= (currentPath === '/login' ? 'active' : '') %>" href="/login">Login</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link <%= (currentPath === '/register' ? 'active' : '') %>" href="/register">Register</a>
+                  </li>
+              <% } else { %>
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle <%= (currentPath.startsWith('/profile') ? 'active' : '') %>" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <%= currentUser.username %>
+                      </a>
+                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                          <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                      </ul>
+                  </li>
+              <% } %>
+          </ul>
       </div>
-    </div>
-  </nav>
+  </div>
+</nav>

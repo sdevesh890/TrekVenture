@@ -1,39 +1,71 @@
-@keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+body {
+    background-color: #f5f5f5;
 }
-.animated {
-    animation-duration: 1s;
-    animation-fill-mode: both;
+
+#map {
+    width: 100%;
+    height: 400px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
-.fadeInUp {
-    animation-name: fadeInUp;
+
+/* Card Styling */
+.card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.card-location {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-text {
+    font-size: 0.9rem;
+}
+
+.btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.btn-outline-primary:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.carousel-inner img {
+    border-radius: 10px 10px 0 0;
+}
+
+@media (max-width: 576px) {
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    .card-location, .card-text {
+        font-size: 0.85rem;
+    }
+
+    #map {
+        height: 300px;
+    }
 }
 .card-img-top {
     width: 100%;
-    height: 200px;
+    height: 300px;
     object-fit: cover;
-}
-
-.card {
-    display: flex;
-    flex-direction: column;
-    justify-content:  space-between;
-    width: 18rem;
-}
-
-.card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.btn-container {
-    margin: 0.8rem 0;
 }

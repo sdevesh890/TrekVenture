@@ -1,0 +1,45 @@
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    color: #f8d64e; /* Gold color for branding */
+}
+
+.navbar-nav .nav-link {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #f8d64e;
+    border-bottom: 2px solid #f8d64e;
+}
+
+.navbar-toggler-icon {
+    color: #ffffff;
+}
+
+.dropdown-menu {
+    background-color: #343a40;
+    border-color: #474f57;
+}
+
+.dropdown-item {
+    color: #ffffff;
+}
+
+.dropdown-item:hover {
+    background-color: #474f57;
+    color: #f8d64e;
+}
+
+.navbar {
+    background: linear-gradient(135deg, #1c1e22, #343a40);
+    padding: 1rem 1.5rem;
+}
+.navbar-nav .nav-link.active {
+    color: #f8d64e;
+    border-bottom: 2px solid #f8d64e;
+}

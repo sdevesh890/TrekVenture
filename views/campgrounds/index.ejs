@@ -1,36 +1,50 @@
 <% layout('layouts/boilerplate') %>
 <link rel="stylesheet" href="/CSS/index.css">    
 <title>Campgrounds</title>
-<div id="map" style="width: 100%; height: 400px;" class="mb-5"></div>
-<h3 class="text-center">All Campgrounds</h3>
-<ul class="d-flex flex-wrap">
-    <% for(let camp of campgrounds) { %>
-        <div class="card m-5 animated fadeInUp">
-            <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <% camp.images.forEach((img,i) => { %>
-                        <div class="carousel-item <%= i===0?'active' : '' %>">
-                            <img src="<%= img.url %>" class="card-img-top img-thumbnail" alt="...">
-                          </div>
-                    <% }) %>
-                </div>
-              </div>
-            <div class="card-body">
-                <div class="card-content">
-                    <h5 class="card-title"><%= camp.title %></h5>
-                    <p><%= camp.location %></p>
-                    <p class="card-text"><%= camp.description %></p>
-                </div>
-                <div class="btn-container">
-                    <a href="/campgrounds/<%= camp._id %>" class="btn btn-primary">Details</a>
+<div id="map" class="mb-5 shadow-lg"></div>
+
+<h3 class="text-center my-4">Explore Our Campgrounds</h3>
+
+<div class="container">
+    <div class="row">
+        <% campgrounds.forEach(camp => { %>
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="card h-100 shadow-sm animated fadeInUp">
+                    <div id="carousel-<%= camp._id %>" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <% camp.images.forEach((img, i) => { %>
+                                <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+                                    <img src="<%= img.url %>" class="card-img-top img-fluid" alt="<%= camp.title %>">
+                                </div>
+                            <% }) %>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel-<%= camp._id %>" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carousel-<%= camp._id %>" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-primary"><%= camp.title %>
+                            <% if (currentUser && camp.author.equals(currentUser._id)) { %>
+                                <sup>&#11088;</sup>
+                            <% } %>
+                        </h5>
+                        <p class="card-location text-muted"><i class="fas fa-map-marker-alt"></i> <%= camp.location %></p>
+                        <p class="card-text"><%= camp.description.length > 100 ? camp.description.substring(0, 100) + '...' : camp.description %></p>
+                        <a href="/campgrounds/<%= camp._id %>" class="btn btn-outline-primary btn-block mt-auto">View Details</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    <% } %>
-</ul>
+        <% }) %>
+    </div>
+</div>
 
 <script>
     const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
-    const campgrounds = { features: <%- JSON.stringify(campgrounds) %>}
+    const campgrounds = { features: <%- JSON.stringify(campgrounds) %> };
 </script>
 <script src="/Javascript/clusterMap.js"></script>
