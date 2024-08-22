@@ -20,12 +20,13 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const mongoSanitize = require('express-mongo-sanitize');
-
+const MongoStore = require('connect-mongo');
+const dbUrl = process.env.DB_URL;
 app.listen(3000, () => {
   console.log("SERVING ON PORT 3000");
 });
-
-mongoose.connect("mongodb://127.0.0.1:27017/Trek-Venture");
+// mongodb://127.0.0.1:27017/Trek-Venture
+mongoose.connect(dbUrl);
 
 const db = mongoose.connection;
 
@@ -34,7 +35,16 @@ db.once("open", () => {
   console.log("Database Connected");
 });
 
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  touchAfter: 24 * 60 * 60,
+  crypto: {
+      secret: 'thisshouldbeabettersecret!'
+  }
+});
+
 const sessionConfig = {
+    store , 
     secret : 'THISSHOULDBEASECRET!',
     resave : false , 
     saveUninitialized : true ,
