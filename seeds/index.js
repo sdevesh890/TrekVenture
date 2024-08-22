@@ -1,10 +1,11 @@
+require('dotenv').config();
 const mongoose = require("mongoose");
 const Campground = require("../models/TrekModel");
 const cities = require('./cities');
 const {descriptors , places} = require('./seedHelpers');
 const axios = require('axios');
-
-mongoose.connect("mongodb://127.0.0.1:27017/Trek-Venture");
+const dbUrl = process.env.DB_URL;
+mongoose.connect(dbUrl);
 
 const db = mongoose.connection;
 
@@ -37,7 +38,7 @@ const seedDB = async () => {
     const price = Math.floor(Math.random()*15 + 1);
     // seed data into campground
     const camp = new Campground({
-      author : '66ab832037a11061582557c1',
+      author : '66c729f4e7a08bd31f1aca9e',
       title: `${descriptors[descriptorsSeed]} ${places[placeSeed]}`,
       location: `${cities[citySeed].city}, ${cities[citySeed].state}`,
       price : price,
